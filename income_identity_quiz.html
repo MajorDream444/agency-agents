@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Income Identity Quiz — melissa.today</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,600;1,300;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0F0E0B;
+  --surface:#1A1815;
+  --surface2:#242119;
+  --surface3:#2E2B24;
+  --ink:#F2EFE8;
+  --ink2:#A09A8E;
+  --ink3:#665F54;
+  --border:rgba(255,255,255,0.07);
+  --border2:rgba(255,255,255,0.13);
+  --gold:#C49A2F;
+  --gold2:#8A6B1A;
+  --gold-l:rgba(196,154,47,0.12);
+  --green:#2E7D5A;
+  --green-l:rgba(46,125,90,0.15);
+  --teal:#1E6E7A;
+  --teal-l:rgba(30,110,122,0.15);
+  --coral:#A03A20;
+  --coral-l:rgba(160,58,32,0.15);
+}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  font-size:15px;
+  line-height:1.65;
+  min-height:100vh;
+}
+
+/* ── LAYOUT ── */
+.shell{max-width:640px;margin:0 auto;padding:0 1.25rem 4rem;}
+
+/* ── HEADER ── */
+.quiz-header{
+  padding:2.5rem 0 2rem;
+  text-align:center;
+  border-bottom:0.5px solid var(--border);
+  margin-bottom:2.5rem;
+}
+.qh-tag{
+  font-size:10px;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:14px;
+}
+.qh-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:36px;font-weight:300;
+  color:var(--ink);line-height:1.15;margin-bottom:10px;
+}
+.qh-title em{font-style:italic;color:var(--ink2);}
+.qh-sub{font-size:14px;color:var(--ink2);max-width:440px;margin:0 auto;}
+
+/* ── PROGRESS ── */
+.progress-wrap{margin-bottom:1.75rem;}
+.progress-label{
+  display:flex;justify-content:space-between;
+  font-size:11px;color:var(--ink3);margin-bottom:8px;
+}
+.progress-bar{
+  height:2px;background:var(--surface3);border-radius:2px;overflow:hidden;
+}
+.progress-fill{
+  height:100%;background:var(--gold);border-radius:2px;
+  transition:width 0.4s ease;
+}
+
+/* ── QUESTION CARD ── */
+.q-card{
+  background:var(--surface);
+  border:0.5px solid var(--border);
+  border-radius:16px;
+  padding:2rem 2rem 1.75rem;
+  animation:fadeUp 0.35s ease forwards;
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(14px);}
+  to{opacity:1;transform:translateY(0);}
+}
+.q-num{
+  font-size:11px;color:var(--ink3);letter-spacing:0.08em;
+  text-transform:uppercase;margin-bottom:10px;
+}
+.q-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;font-weight:400;
+  color:var(--ink);line-height:1.35;margin-bottom:1.5rem;
+}
+.q-options{display:flex;flex-direction:column;gap:9px;}
+.q-opt{
+  display:flex;align-items:flex-start;gap:12px;
+  border:0.5px solid var(--border2);
+  border-radius:10px;padding:13px 16px;
+  cursor:pointer;
+  background:var(--surface2);
+  transition:border-color 0.18s, background 0.18s;
+  text-align:left;width:100%;
+}
+.q-opt:hover{
+  border-color:var(--gold2);
+  background:var(--gold-l);
+}
+.q-opt.selected{
+  border-color:var(--gold);
+  background:var(--gold-l);
+}
+.opt-letter{
+  flex-shrink:0;width:22px;height:22px;border-radius:50%;
+  background:var(--surface3);border:0.5px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:500;color:var(--ink3);
+  margin-top:1px;transition:background 0.18s,color 0.18s;
+}
+.q-opt.selected .opt-letter{background:var(--gold);color:var(--bg);}
+.opt-text{font-size:14px;color:var(--ink);line-height:1.5;}
+
+/* ── NAV ── */
+.q-nav{display:flex;justify-content:flex-end;margin-top:1.5rem;}
+.btn-next{
+  background:var(--gold);color:var(--bg);
+  border:none;border-radius:8px;
+  padding:11px 26px;font-size:14px;font-weight:500;
+  font-family:'DM Sans',sans-serif;
+  cursor:pointer;transition:opacity 0.18s;
+  opacity:0.35;pointer-events:none;
+}
+.btn-next.active{opacity:1;pointer-events:all;}
+.btn-next.active:hover{opacity:0.88;}
+
+/* ── RESULTS ── */
+.result-card{
+  border-radius:16px;padding:2.25rem 2rem 2rem;
+  animation:fadeUp 0.4s ease forwards;
+  display:none;
+}
+.result-card.show{display:block;}
+.result-card.quick{background:linear-gradient(145deg,#1A1512,#201810);border:0.5px solid rgba(160,58,32,0.35);}
+.result-card.skill{background:linear-gradient(145deg,#10171A,#121E20);border:0.5px solid rgba(30,110,122,0.35);}
+.result-card.builder{background:linear-gradient(145deg,#111A13,#131F16);border:0.5px solid rgba(46,125,90,0.35);}
+
+.result-tag{
+  display:inline-block;font-size:10px;font-weight:500;
+  text-transform:uppercase;letter-spacing:0.1em;
+  padding:4px 12px;border-radius:999px;margin-bottom:14px;
+}
+.quick .result-tag{background:var(--coral-l);color:#E07050;border:0.5px solid rgba(160,58,32,0.3);}
+.skill .result-tag{background:var(--teal-l);color:#4EC0D0;border:0.5px solid rgba(30,110,122,0.3);}
+.builder .result-tag{background:var(--green-l);color:#5DC096;border:0.5px solid rgba(46,125,90,0.3);}
+
+.result-type{
+  font-family:'Cormorant Garamond',serif;
+  font-size:34px;font-weight:500;color:var(--ink);
+  line-height:1.1;margin-bottom:12px;
+}
+.result-desc{
+  font-size:14px;color:var(--ink2);line-height:1.7;
+  margin-bottom:1.75rem;padding-bottom:1.75rem;
+  border-bottom:0.5px solid var(--border);
+}
+
+.result-sections{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem;}
+.rs-block{background:rgba(255,255,255,0.03);border:0.5px solid var(--border);border-radius:10px;padding:1rem 1.1rem;}
+.rs-label{
+  font-size:10px;text-transform:uppercase;letter-spacing:0.08em;
+  color:var(--ink3);margin-bottom:8px;font-weight:500;
+}
+.rs-items{font-size:13px;color:var(--ink);line-height:1.6;}
+.rs-item{padding-left:14px;position:relative;margin-bottom:5px;}
+.rs-item::before{content:'→';position:absolute;left:0;color:var(--gold);font-size:11px;}
+
+.offer-box{
+  background:var(--gold-l);border:0.5px solid rgba(196,154,47,0.25);
+  border-radius:10px;padding:1.1rem 1.25rem;
+}
+.ob-label{font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--gold);margin-bottom:5px;font-weight:500;}
+.ob-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--ink);margin-bottom:3px;}
+.ob-sub{font-size:12px;color:var(--ink2);}
+
+.result-cta{
+  margin-top:1.5rem;display:flex;gap:10px;flex-wrap:wrap;
+}
+.btn-primary{
+  background:var(--gold);color:var(--bg);
+  border:none;border-radius:8px;padding:12px 24px;
+  font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;
+  cursor:pointer;transition:opacity 0.18s;
+}
+.btn-primary:hover{opacity:0.88;}
+.btn-retake{
+  background:transparent;color:var(--ink2);
+  border:0.5px solid var(--border2);border-radius:8px;
+  padding:12px 20px;font-size:14px;font-family:'DM Sans',sans-serif;
+  cursor:pointer;transition:background 0.18s;
+}
+.btn-retake:hover{background:var(--surface2);}
+
+/* HIDDEN */
+.hidden{display:none!important;}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="quiz-header">
+    <div class="qh-tag">melissa.today × income identity</div>
+    <div class="qh-title">What's Your<br><em>Income Identity?</em></div>
+    <div class="qh-sub">10 questions. Discover the income path that fits who you are — and what to do first when you land in South Africa.</div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-label">
+      <span id="progressLabel">Question 1 of 10</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+
+  <!-- QUESTION CONTAINER -->
+  <div id="questionContainer"></div>
+
+  <!-- RESULTS -->
+  <div id="resultContainer">
+
+    <!-- QUICK CASH OPERATOR -->
+    <div class="result-card quick" id="result-quick">
+      <span class="result-tag">Your Income Identity</span>
+      <div class="result-type">Quick Cash<br>Operator</div>
+      <div class="result-desc">You move fast and you know it. You are not here to build slowly — you need cash in hand within weeks of landing, not months. Your strength is execution speed. You spot an opportunity, you run at it, and you figure out the details in motion. In South Africa, that energy is a serious advantage. The market is underserved in service businesses, skilled trades, and on-the-ground hustle that US and UK-trained women can start immediately with minimal setup.</div>
+      <div class="result-sections">
+        <div class="rs-block">
+          <div class="rs-label">Your income path</div>
+          <div class="rs-items">
+            <div class="rs-item">Service business (VA, social media, admin)</div>
+            <div class="rs-item">Local market arbitrage (import/resell)</div>
+            <div class="rs-item">Skill-based gigs on Upwork / PeoplePerHour</div>
+            <div class="rs-item">Short-term Airbnb co-hosting</div>
+          </div>
+        </div>
+        <div class="rs-block">
+          <div class="rs-label">First 3 actions</div>
+          <div class="rs-items">
+            <div class="rs-item">List one service on Upwork before you land</div>
+            <div class="rs-item">Join 2 SA entrepreneur WhatsApp groups in week 1</div>
+            <div class="rs-item">Get a local SIM and SA bank account in 48 hours</div>
+          </div>
+        </div>
+      </div>
+      <div class="offer-box">
+        <div class="ob-label">Recommended offer</div>
+        <div class="ob-title">SA Quick Start Bundle — melissatoday.com</div>
+        <div class="ob-sub">On-demand program + income pathway guide + 1:1 strategy session to map your first 30 days of income in South Africa.</div>
+      </div>
+      <div class="result-cta">
+        <button class="btn-primary" onclick="window.open('https://melissatoday.com','_blank')">Get the Quick Start Bundle</button>
+        <button class="btn-retake" onclick="retake()">Retake quiz</button>
+      </div>
+    </div>
+
+    <!-- SKILL MONETIZER -->
+    <div class="result-card skill" id="result-skill">
+      <span class="result-tag">Your Income Identity</span>
+      <div class="result-type">Skill<br>Monetizer</div>
+      <div class="result-desc">You have built real expertise — in a profession, a craft, a creative practice, or a knowledge domain — and you have never fully charged what it is worth. South Africa changes that equation. Your US or UK credentials carry weight in a market where they are genuinely scarce. Whether it is consulting, coaching, teaching, designing, or building, you have an asset that the local market will pay for at rates that feel extraordinary to them and still represent a raise for you.</div>
+      <div class="result-sections">
+        <div class="rs-block">
+          <div class="rs-label">Your income path</div>
+          <div class="rs-items">
+            <div class="rs-item">Consulting in your professional field</div>
+            <div class="rs-item">Online course or workshop series</div>
+            <div class="rs-item">1:1 coaching or mentorship</div>
+            <div class="rs-item">Fractional executive or contractor work</div>
+          </div>
+        </div>
+        <div class="rs-block">
+          <div class="rs-label">First 3 actions</div>
+          <div class="rs-items">
+            <div class="rs-item">Package your skill into one clear offer statement</div>
+            <div class="rs-item">Set up a simple Gumroad or Calendly page</div>
+            <div class="rs-item">Post your first piece of authority content in SA groups</div>
+          </div>
+        </div>
+      </div>
+      <div class="offer-box">
+        <div class="ob-label">Recommended offer</div>
+        <div class="ob-title">System Install — melissatoday.com</div>
+        <div class="ob-sub">$297 consulting session that maps your existing expertise to a South African income stream with a 90-day activation plan.</div>
+      </div>
+      <div class="result-cta">
+        <button class="btn-primary" onclick="window.open('https://melissatoday.com','_blank')">Book Your System Install</button>
+        <button class="btn-retake" onclick="retake()">Retake quiz</button>
+      </div>
+    </div>
+
+    <!-- BUILDER / INVESTOR -->
+    <div class="result-card builder" id="result-builder">
+      <span class="result-tag">Your Income Identity</span>
+      <div class="result-type">Builder /<br>Investor</div>
+      <div class="result-desc">You are not here for a job. You are here to own something. Whether that is property, a business, a portfolio, or a platform — you think in assets, not hours. South Africa is one of the last accessible markets on earth where a dollar-denominated investor can enter early, build at a fraction of Western cost, and position ahead of a curve that most people have not yet seen. You are not relocating. You are deploying capital — financial, intellectual, or creative.</div>
+      <div class="result-sections">
+        <div class="rs-block">
+          <div class="rs-label">Your income path</div>
+          <div class="rs-items">
+            <div class="rs-item">Property acquisition (rental / Airbnb)</div>
+            <div class="rs-item">SA business ownership or partnership</div>
+            <div class="rs-item">Brand or platform building with IP</div>
+            <div class="rs-item">Genesis Key ecosystem (melissa.today)</div>
+          </div>
+        </div>
+        <div class="rs-block">
+          <div class="rs-label">First 3 actions</div>
+          <div class="rs-items">
+            <div class="rs-item">Book a relocation + investment consultation</div>
+            <div class="rs-item">Research Cape Town, Joburg, Durban property zones</div>
+            <div class="rs-item">Secure a Genesis Key tier on melissa.today</div>
+          </div>
+        </div>
+      </div>
+      <div class="offer-box">
+        <div class="ob-label">Recommended offer</div>
+        <div class="ob-title">Relocation + Build Cohort — melissatoday.com</div>
+        <div class="ob-sub">The $1,500 cohort plus a private consultation on income-generating assets in South Africa. For women who are moving to build, not just live.</div>
+      </div>
+      <div class="result-cta">
+        <button class="btn-primary" onclick="window.open('https://melissatoday.com','_blank')">Join the Build Cohort</button>
+        <button class="btn-retake" onclick="retake()">Retake quiz</button>
+      </div>
+    </div>
+
+  </div><!-- /resultContainer -->
+
+</div><!-- /shell -->
+
+<script>
+const questions = [
+  {
+    text: "When you think about money in South Africa, what is your first instinct?",
+    opts: [
+      {text:"I need to generate cash quickly — I cannot wait months to see income.", score:{Q:3,S:1,B:0}},
+      {text:"I want to monetize what I already know and have spent years building.", score:{Q:1,S:3,B:1}},
+      {text:"I want to own something — property, a business, or an asset.", score:{Q:0,S:1,B:3}},
+      {text:"I am not sure yet. I just know I want financial independence.", score:{Q:1,S:2,B:1}}
+    ]
+  },
+  {
+    text: "What best describes your professional background?",
+    opts: [
+      {text:"I have a practical skill set — admin, service, trades, logistics, sales.", score:{Q:3,S:1,B:0}},
+      {text:"I have a professional credential — healthcare, education, finance, law, tech, design.", score:{Q:0,S:3,B:1}},
+      {text:"I have an entrepreneurial track record — I have built, run, or invested in something.", score:{Q:1,S:1,B:3}},
+      {text:"I am a creative — music, art, writing, content, brand work.", score:{Q:1,S:2,B:1}}
+    ]
+  },
+  {
+    text: "How much capital are you bringing to South Africa?",
+    opts: [
+      {text:"Under $5,000 — I need to earn my way there.", score:{Q:3,S:2,B:0}},
+      {text:"$5,000–$20,000 — enough to get set up and launch something small.", score:{Q:1,S:3,B:1}},
+      {text:"$20,000–$100,000 — I have real deployment capacity.", score:{Q:0,S:1,B:3}},
+      {text:"$100,000+ — I am thinking about property or business acquisition.", score:{Q:0,S:0,B:4}}
+    ]
+  },
+  {
+    text: "What is your biggest financial priority in the first 90 days?",
+    opts: [
+      {text:"Cover my living costs as fast as possible.", score:{Q:4,S:1,B:0}},
+      {text:"Launch a service or product I can sell repeatedly.", score:{Q:1,S:3,B:1}},
+      {text:"Identify and secure the right long-term asset or opportunity.", score:{Q:0,S:1,B:4}},
+      {text:"Find community and figure out my path alongside other women.", score:{Q:1,S:2,B:1}}
+    ]
+  },
+  {
+    text: "When you imagine your South Africa income one year from now, it looks like:",
+    opts: [
+      {text:"Multiple income streams — a few clients, a gig, maybe a small product.", score:{Q:3,S:1,B:1}},
+      {text:"One clear professional practice or business I am known for.", score:{Q:0,S:4,B:1}},
+      {text:"Passive or semi-passive income from something I own.", score:{Q:0,S:1,B:4}},
+      {text:"I am still working it out — I just want options.", score:{Q:2,S:2,B:1}}
+    ]
+  },
+  {
+    text: "How comfortable are you with uncertainty?",
+    opts: [
+      {text:"Very — I figure it out as I go. That is my natural mode.", score:{Q:4,S:1,B:1}},
+      {text:"Moderate — I want a plan, but I can adapt when things shift.", score:{Q:1,S:3,B:2}},
+      {text:"I prefer calculated risk — I want data and a clear thesis before I move.", score:{Q:0,S:2,B:4}},
+      {text:"I need stability. I want a proven path, not experiments.", score:{Q:2,S:3,B:0}}
+    ]
+  },
+  {
+    text: "What is your relationship with selling?",
+    opts: [
+      {text:"I am comfortable selling — I just need a product or service to back it.", score:{Q:3,S:2,B:1}},
+      {text:"I prefer my work to speak for itself. I want clients to come to me.", score:{Q:0,S:3,B:2}},
+      {text:"I think in deals and partnerships, not transactions.", score:{Q:1,S:1,B:4}},
+      {text:"I am still building my confidence in this area.", score:{Q:2,S:2,B:1}}
+    ]
+  },
+  {
+    text: "How do you feel about digital products and online income?",
+    opts: [
+      {text:"I want to earn through services and on-the-ground work first.", score:{Q:3,S:1,B:0}},
+      {text:"I want to package my knowledge into a course, book, or program.", score:{Q:0,S:4,B:1}},
+      {text:"I want digital income as part of a larger portfolio.", score:{Q:1,S:1,B:3}},
+      {text:"I am open to anything that generates real income.", score:{Q:2,S:2,B:1}}
+    ]
+  },
+  {
+    text: "What best describes your working style?",
+    opts: [
+      {text:"Sprint-based — I go hard, get results, rest, repeat.", score:{Q:4,S:1,B:1}},
+      {text:"Consistent and professional — I show up daily, build relationships, and earn trust.", score:{Q:1,S:4,B:1}},
+      {text:"Strategic — I am always thinking three moves ahead.", score:{Q:0,S:1,B:4}},
+      {text:"Collaborative — I do my best work alongside other people.", score:{Q:2,S:2,B:1}}
+    ]
+  },
+  {
+    text: "What does financial freedom look like to you?",
+    opts: [
+      {text:"Not worrying about next month's rent or groceries.", score:{Q:4,S:1,B:0}},
+      {text:"Being paid well for work I am genuinely good at.", score:{Q:1,S:4,B:1}},
+      {text:"Having assets that generate income whether I work or not.", score:{Q:0,S:1,B:4}},
+      {text:"Living on my own terms — location, time, and people I choose.", score:{Q:2,S:2,B:2}}
+    ]
+  }
+];
+
+let current = 0;
+let selected = null;
+let scores = {Q:0, S:0, B:0};
+
+function render(){
+  const q = questions[current];
+  const pct = Math.round((current/questions.length)*100);
+  document.getElementById('progressLabel').textContent = `Question ${current+1} of ${questions.length}`;
+  document.getElementById('progressPct').textContent = pct+'%';
+  document.getElementById('progressFill').style.width = pct+'%';
+
+  const container = document.getElementById('questionContainer');
+  container.innerHTML = `
+    <div class="q-card">
+      <div class="q-num">Question ${current+1} of ${questions.length}</div>
+      <div class="q-text">${q.text}</div>
+      <div class="q-options">
+        ${q.opts.map((o,i)=>`
+          <button class="q-opt" data-idx="${i}" onclick="selectOpt(${i})">
+            <span class="opt-letter">${['A','B','C','D'][i]}</span>
+            <span class="opt-text">${o.text}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="q-nav">
+        <button class="btn-next" id="btnNext" onclick="next()">
+          ${current < questions.length-1 ? 'Next question →' : 'See my result →'}
+        </button>
+      </div>
+    </div>
+  `;
+  selected = null;
+}
+
+function selectOpt(idx){
+  selected = idx;
+  document.querySelectorAll('.q-opt').forEach((el,i)=>{
+    el.classList.toggle('selected', i===idx);
+  });
+  document.getElementById('btnNext').classList.add('active');
+}
+
+function next(){
+  if(selected===null) return;
+  const q = questions[current];
+  const sc = q.opts[selected].score;
+  scores.Q += sc.Q; scores.S += sc.S; scores.B += sc.B;
+  current++;
+  if(current >= questions.length){
+    showResult();
+  } else {
+    render();
+  }
+}
+
+function showResult(){
+  document.getElementById('progressWrap').classList.add('hidden');
+  document.getElementById('questionContainer').classList.add('hidden');
+  document.getElementById('progressFill').style.width='100%';
+
+  let winner = 'quick';
+  if(scores.S >= scores.Q && scores.S >= scores.B) winner='skill';
+  else if(scores.B >= scores.Q && scores.B >= scores.S) winner='builder';
+
+  document.getElementById('result-quick').classList.remove('show');
+  document.getElementById('result-skill').classList.remove('show');
+  document.getElementById('result-builder').classList.remove('show');
+  document.getElementById('result-'+winner).classList.add('show');
+}
+
+function retake(){
+  current=0; selected=null; scores={Q:0,S:0,B:0};
+  document.getElementById('progressWrap').classList.remove('hidden');
+  document.getElementById('questionContainer').classList.remove('hidden');
+  document.getElementById('result-quick').classList.remove('show');
+  document.getElementById('result-skill').classList.remove('show');
+  document.getElementById('result-builder').classList.remove('show');
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
