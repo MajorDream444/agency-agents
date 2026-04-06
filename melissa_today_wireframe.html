@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>melissa.today — site redesign wireframe</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --color-bg: #FAFAF9;
+    --color-surface: #FFFFFF;
+    --color-surface-2: #F4F2EE;
+    --color-text-primary: #1A1917;
+    --color-text-secondary: #5C5A56;
+    --color-text-tertiary: #96948F;
+    --color-border: rgba(0,0,0,0.1);
+    --color-border-2: rgba(0,0,0,0.18);
+    --color-purple: #534AB7;
+    --color-purple-light: #EEEDFE;
+    --color-purple-mid: #AFA9EC;
+    --color-purple-dark: #3C3489;
+    --color-teal: #0F6E56;
+    --color-teal-light: #E1F5EE;
+    --color-teal-mid: #5DCAA5;
+    --color-coral: #993C1D;
+    --color-coral-light: #FAECE7;
+    --color-coral-mid: #F0997B;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+  }
+
+  body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* ── Nav ── */
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0 20px;
+    border-bottom: 0.5px solid var(--color-border);
+    margin-bottom: 2rem;
+  }
+  .nav-logo {
+    font-family: 'Georgia', serif;
+    font-size: 17px;
+    font-weight: normal;
+    color: var(--color-text-primary);
+    letter-spacing: 0.02em;
+  }
+  .nav-links {
+    display: flex;
+    gap: 20px;
+    font-size: 13px;
+    font-family: Arial, sans-serif;
+    color: var(--color-text-secondary);
+    list-style: none;
+  }
+  .nav-links .active {
+    color: var(--color-purple);
+    font-weight: 600;
+  }
+
+  /* ── Section labels ── */
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    font-family: Arial, sans-serif;
+    margin-bottom: 8px;
+  }
+
+  /* ── Section blocks ── */
+  .section-block {
+    border: 0.5px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1.25rem;
+    background: var(--color-surface);
+  }
+  .section-block.accent {
+    border-left: 3px solid var(--color-purple);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  }
+  .section-title {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+
+  /* ── Hero ── */
+  .headline {
+    font-size: 28px;
+    font-weight: normal;
+    color: var(--color-text-primary);
+    line-height: 1.25;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+  .sub {
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+    margin-bottom: 18px;
+    max-width: 580px;
+  }
+  .cta-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .cta-primary {
+    background: var(--color-purple);
+    color: #EEEDFE;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 11px 22px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .cta-primary:hover { opacity: 0.88; }
+  .cta-secondary {
+    background: transparent;
+    color: var(--color-text-primary);
+    border: 0.5px solid var(--color-border-2);
+    border-radius: var(--radius-md);
+    padding: 11px 22px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .cta-secondary:hover { background: var(--color-surface-2); }
+  .copy-block {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+    border-left: 2px solid var(--color-purple-mid);
+    padding-left: 12px;
+    margin-top: 14px;
+    font-style: italic;
+  }
+
+  /* ── Pathways ── */
+  .path-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .path-card {
+    border: 0.5px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.1rem 1.1rem 1rem;
+    background: var(--color-surface-2);
+  }
+  .path-card.featured {
+    border: 1.5px solid var(--color-purple);
+    background: var(--color-surface);
+  }
+  .path-icon { font-size: 20px; margin-bottom: 10px; display: block; }
+  .path-name {
+    font-family: Georgia, serif;
+    font-size: 15px;
+    color: var(--color-text-primary);
+    margin-bottom: 6px;
+  }
+  .path-desc {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    line-height: 1.55;
+    margin-bottom: 12px;
+  }
+  .path-cta {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-purple);
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  .path-cta.teal { color: var(--color-teal); }
+  .path-cta.coral { color: var(--color-coral); }
+
+  /* ── Badges ── */
+  .badge {
+    display: inline-block;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    margin-right: 4px;
+    margin-bottom: 6px;
+  }
+  .b-purple { background: var(--color-purple-light); color: var(--color-purple-dark); }
+  .b-teal { background: var(--color-teal-light); color: var(--color-teal); }
+  .b-coral { background: var(--color-coral-light); color: var(--color-coral); }
+
+  /* ── Quiz ── */
+  .quiz-block {
+    background: var(--color-surface-2);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    margin-top: 12px;
+  }
+  .quiz-q {
+    font-family: Georgia, serif;
+    font-size: 17px;
+    color: var(--color-text-primary);
+    margin-bottom: 14px;
+  }
+  .quiz-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .quiz-opt {
+    border: 0.5px solid var(--color-border-2);
+    border-radius: var(--radius-md);
+    padding: 11px 14px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    color: var(--color-text-primary);
+    background: var(--color-surface);
+    cursor: pointer;
+    line-height: 1.45;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .quiz-opt:hover { border-color: var(--color-purple); color: var(--color-purple-dark); }
+
+  /* ── Trust ── */
+  .trust-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .trust-item {
+    padding: 0.9rem 1rem;
+    background: var(--color-surface-2);
+    border-radius: var(--radius-md);
+  }
+  .trust-label {
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    margin-bottom: 5px;
+  }
+  .trust-val {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    line-height: 1.55;
+  }
+
+  /* ── Offer Ladder ── */
+  .offer-ladder {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .offer-step {
+    border: 0.5px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1rem 0.75rem;
+    text-align: center;
+    background: var(--color-surface-2);
+  }
+  .offer-step.featured {
+    border: 1.5px solid var(--color-purple);
+    background: var(--color-surface);
+  }
+  .offer-price {
+    font-family: Georgia, serif;
+    font-size: 17px;
+    color: var(--color-text-primary);
+    margin-bottom: 4px;
+  }
+  .offer-step.featured .offer-price { color: var(--color-purple); }
+  .offer-name {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    color: var(--color-text-tertiary);
+    line-height: 1.4;
+  }
+
+  /* ── Flow ── */
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .flow-node {
+    background: var(--color-surface-2);
+    border: 0.5px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 7px 13px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: var(--color-text-primary);
+  }
+  .flow-arrow {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    color: var(--color-text-tertiary);
+  }
+  .flow-node.purple { background: var(--color-purple-light); color: var(--color-purple-dark); border-color: var(--color-purple-mid); }
+  .flow-node.teal { background: var(--color-teal-light); color: var(--color-teal); border-color: var(--color-teal-mid); }
+  .flow-node.coral { background: var(--color-coral-light); color: var(--color-coral); border-color: var(--color-coral-mid); }
+
+  /* ── Stack ── */
+  .stack-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .stack-chip {
+    background: var(--color-surface-2);
+    border: 0.5px solid var(--color-border);
+    border-radius: 999px;
+    padding: 5px 14px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+  }
+
+  @media (max-width: 600px) {
+    .path-grid { grid-template-columns: 1fr; }
+    .trust-cols { grid-template-columns: 1fr; }
+    .offer-ladder { grid-template-columns: repeat(3, 1fr); }
+    .quiz-options { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Nav -->
+  <nav class="nav-bar">
+    <span class="nav-logo">melissa.today</span>
+    <ul class="nav-links">
+      <li>start here</li>
+      <li>pathways</li>
+      <li>about</li>
+      <li class="active">join now</li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="section-label">section 1 — hero</div>
+  <div class="section-block accent">
+    <div class="section-title">headline + primary CTA</div>
+    <div class="headline">Move, Make Money, and Build<br>Your Life in South Africa</div>
+    <div class="sub">A platform for women ready to create freedom, income, and community abroad. You're not starting over — you're starting right.</div>
+    <div class="cta-row">
+      <button class="cta-primary">Start Here →</button>
+      <button class="cta-secondary">Watch My Story</button>
+    </div>
+    <div class="copy-block">"I moved to South Africa without a roadmap. Now I'm building one for you."</div>
+  </div>
+
+  <!-- PATHWAYS -->
+  <div class="section-label">section 2 — three pathways</div>
+  <div class="section-block">
+    <div class="section-title">three doors. choose yours.</div>
+    <div class="path-grid">
+      <div class="path-card">
+        <span class="path-icon">💼</span>
+        <div class="path-name">Make Money</div>
+        <div style="margin-bottom:10px;"><span class="badge b-purple">AI systems</span><span class="badge b-purple">consulting</span></div>
+        <div class="path-desc">Set up remote income, AI-powered business tools, and consulting frameworks that work from anywhere.</div>
+        <button class="path-cta">I want income →</button>
+      </div>
+      <div class="path-card featured">
+        <span class="path-icon">💎</span>
+        <div class="path-name">Sell High-Ticket</div>
+        <div style="margin-bottom:10px;"><span class="badge b-teal">affiliate</span><span class="badge b-teal">wellness</span></div>
+        <div class="path-desc">Earn commissions selling premium wellness and beauty products to affluent South African markets.</div>
+        <button class="path-cta teal">I want commissions →</button>
+      </div>
+      <div class="path-card">
+        <span class="path-icon">🌿</span>
+        <div class="path-name">Reset + Build</div>
+        <div style="margin-bottom:10px;"><span class="badge b-coral">retreat</span><span class="badge b-coral">rebuild</span></div>
+        <div class="path-desc">For burnt-out founders and mamas. A retreat + system install that rebuilds life and business from the ground up.</div>
+        <button class="path-cta coral">I need a reset →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ / FUNNEL ENTRY -->
+  <div class="section-label">section 3 — entry funnel / quiz</div>
+  <div class="section-block">
+    <div class="section-title">route visitors by intent</div>
+    <div class="quiz-block">
+      <div class="quiz-q">What are you trying to do right now?</div>
+      <div class="quiz-options">
+        <div class="quiz-opt">I want to make money while living abroad</div>
+        <div class="quiz-opt">I want to sell a high-ticket product or opportunity</div>
+        <div class="quiz-opt">I'm burned out and need a full reset</div>
+        <div class="quiz-opt">I'm still figuring it out — show me everything</div>
+      </div>
+    </div>
+    <div class="copy-block" style="margin-top:12px;">Each answer routes to a dedicated pathway page with a custom offer and CTA flow.</div>
+  </div>
+
+  <!-- TRUST + STORY -->
+  <div class="section-label">section 4 — trust + story</div>
+  <div class="section-block">
+    <div class="section-title">why this, why her, why now</div>
+    <div class="trust-cols">
+      <div class="trust-item">
+        <div class="trust-label">her story</div>
+        <div class="trust-val">"I left the US with a suitcase and a dream. I found a community, built a business, and now I help others do the same — faster."</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-label">why south africa</div>
+        <div class="trust-val">Low cost, high culture, expat-friendly zones, growing economy, and a Black-led business scene that is ready for you.</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-label">who she serves</div>
+        <div class="trust-val">Black women expats. Single moms abroad. Corporate professionals ready to pivot. Women done waiting for permission.</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-label">proof layer</div>
+        <div class="trust-val">[Photo grid of meetups] · [Testimonial cards] · [Community count] · [Media mentions] · [Impact story]</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OFFER LADDER -->
+  <div class="section-label">section 5 — offer ladder</div>
+  <div class="section-block">
+    <div class="section-title">simple entry → high ticket</div>
+    <div class="offer-ladder">
+      <div class="offer-step">
+        <div class="offer-price">Free</div>
+        <div class="offer-name">SA Starter Guide</div>
+      </div>
+      <div class="offer-step">
+        <div class="offer-price">$47</div>
+        <div class="offer-name">Income Toolkit</div>
+      </div>
+      <div class="offer-step featured">
+        <div class="offer-price">$297</div>
+        <div class="offer-name">System Install</div>
+      </div>
+      <div class="offer-step">
+        <div class="offer-price">Rev share</div>
+        <div class="offer-name">Affiliate Program</div>
+      </div>
+      <div class="offer-step">
+        <div class="offer-price">$2,500+</div>
+        <div class="offer-name">Retreat</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MONETIZATION FLOW -->
+  <div class="section-label">section 6 — monetization flow</div>
+  <div class="section-block">
+    <div class="section-title">traffic → trust → transaction</div>
+    <div class="flow-row">
+      <div class="flow-node">Visitor lands</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">Quiz routes them</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">Pathway page</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">Lead capture</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">Email sequence</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">Offer presented</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">Sale / Partner</div>
+    </div>
+    <div class="flow-row" style="margin-top:10px;">
+      <div class="flow-node purple">WhatsApp CTA</div>
+      <div class="flow-arrow">+</div>
+      <div class="flow-node teal">Email nurture</div>
+      <div class="flow-arrow">+</div>
+      <div class="flow-node coral">Affiliate onboarding</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">Recurring revenue</div>
+    </div>
+  </div>
+
+  <!-- TECH STACK -->
+  <div class="section-label">tech stack recommendation</div>
+  <div class="section-block">
+    <div class="section-title">lean and linkable</div>
+    <div class="stack-row">
+      <span class="stack-chip">Gumroad — digital products + affiliate</span>
+      <span class="stack-chip">ConvertKit — email sequences</span>
+      <span class="stack-chip">Typeform — quiz / pathway selector</span>
+      <span class="stack-chip">Airtable — lead enrichment CRM</span>
+      <span class="stack-chip">WhatsApp Business API — closing layer</span>
+      <span class="stack-chip">Notion — affiliate onboarding portal</span>
+      <span class="stack-chip">Calendly — retreat / consult booking</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
